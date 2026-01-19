@@ -70,17 +70,28 @@ async function Login(req: Request, res: Response) {
       { expiresIn: "60m" },
     );
 
-    return res.cookie("token", token, { httpOnly: true, secure: false }).json({
-      success: true,
-      message: "Logged in successfully",
-      user: {
-        email: checkUser.email,
-        role: checkUser.role,
-        id: checkUser._id,
-        userName: checkUser.userName,
-      },
-      token,
-    });
+    // return  res.cookie('meuCookie', 'valorDoCookie', { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
+    return (
+      res
+        .cookie("tokenCookie", token, {
+          maxAge: 24 * 60 * 60 * 1000,
+          httpOnly: true,
+          // secure: false,
+        })
+
+        // { httpOnly: true, secure: false })
+        .json({
+          success: true,
+          message: "Logged in successfully",
+          user: {
+            email: checkUser.email,
+            role: checkUser.role,
+            id: checkUser._id,
+            userName: checkUser.userName,
+          },
+          token,
+        })
+    );
   } catch (error) {
     // return res.json({ msg: "LOGADO!!", user });
     return res.json({ msg: "ERROR!", error });
@@ -94,7 +105,7 @@ function logoutUser(req: Request, res: Response) {
   });
 }
 
-const authMiddleware = async (req: Request, res: Response, next: any) => {
+async function authMiddleware(req: Request, res: Response, next: any) {
   const token = req.cookies.token;
   if (!token)
     return res.status(401).json({
@@ -114,6 +125,6 @@ const authMiddleware = async (req: Request, res: Response, next: any) => {
       message: "Unauthorised user!",
     });
   }
-};
+}
 
 export default { CreateUser, FindUsers, Login, logoutUser, authMiddleware };

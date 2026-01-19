@@ -18,7 +18,11 @@ routes.get("/", (req: Request, res: Response) => {
 // users
 routes.post("/create-user", userController.CreateUser);
 routes.post("/login", userController.Login);
-routes.get("/get-users", userController.FindUsers);
+routes.get(
+  "/get-users",
+  userController.authMiddleware,
+  userController.FindUsers,
+);
 // routes.put("/update-user/:id", userController.updateUser);
 // routes.delete("/delete-user/:id", userController.deleteUser);
 
