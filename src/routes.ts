@@ -23,6 +23,7 @@ routes.get(
   userController.authMiddleware,
   userController.FindUsers,
 );
+routes.post("/logout", userController.logoutUser);
 // routes.put("/update-user/:id", userController.updateUser);
 // routes.delete("/delete-user/:id", userController.deleteUser);
 

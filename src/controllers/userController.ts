@@ -122,7 +122,7 @@ async function Login(req: Request, res: Response) {
 }
 
 function logoutUser(req: Request, res: Response) {
-  res.clearCookie("token").json({
+  res.clearCookie("tokencookie").json({
     success: true,
     message: "Logged out successfully!",
   });
