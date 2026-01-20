@@ -1,8 +1,10 @@
-import { Router } from "express";
+import express, { Router } from "express";
 import { Request, Response } from "express";
 import { multerConfig } from "./config/uploader";
 import productsController from "./controllers/userController";
 import userController from "./controllers/userController";
+import productController from "./controllers/admin/productController";
+import { upload } from "../src/helpers/cloudinary";
 
 const routes = Router();
 
@@ -11,6 +13,12 @@ routes.get("/", (req: Request, res: Response) => {
 });
 
 // products
+
+routes.post(
+  "/add-product",
+  upload.single("image"),
+  productController.addProduct,
+);
 // routes.post("/create-product", multerConfig, productsController.createProduct);
 // routes.get("/get-products", productsController.getProducts);
 // routes.get("/get-one-product/:id", productsController.getOneProduct);
