@@ -30,6 +30,16 @@ async function CreateUser(req: Request, res: Response) {
 
 async function FindUsers(req: Request, res: Response) {
   try {
+    // const token = req.cookies.tokencookie;
+
+    // console.log(token);
+
+    // // console.log(token);
+    // if (!token)
+    //   return res.status(401).json({
+    //     success: false,
+    //     message: "Unauthorised user!",
+    //   });
     const user = await User.find();
 
     return res.json({ user });
@@ -70,11 +80,24 @@ async function Login(req: Request, res: Response) {
       { expiresIn: "60m" },
     );
 
+    // app.get('/definir-cookie', (req, res) => {
+    //     // 2 dias em milissegundos
+    //     const doisDiasEmMs = 2 * 24 * 60 * 60 * 1000;
+
+    //     res.cookie('meuCookie', 'valorSecret', {
+    //         maxAge: doisDiasEmMs, // Define a duração
+    //         httpOnly: true,       // Boa prática: seguro contra XSS
+    //         secure: true,         // Opcional: apenas HTTPS (recomendado para produção)
+    //         sameSite: 'lax'       // Opcional: proteção CSRF
+    //     });
+
+    //     res.send('Cookie definido para durar 2 dias!');
+    // });
     // return  res.cookie('meuCookie', 'valorDoCookie', { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
     return (
       res
-        .cookie("tokenCookie", token, {
-          maxAge: 24 * 60 * 60 * 1000,
+        .cookie("tokencookie", token, {
+          // maxAge: 3 * 24 * 60 * 60 * 1000,
           httpOnly: true,
           // secure: false,
         })
@@ -105,8 +128,10 @@ function logoutUser(req: Request, res: Response) {
   });
 }
 
-async function authMiddleware(req: Request, res: Response, next: any) {
-  const token = req.cookies.token;
+function authMiddleware(req: Request, res: Response, next: any) {
+  const token = req.cookies.tokencookie;
+
+  // console.log(token);
   if (!token)
     return res.status(401).json({
       success: false,
