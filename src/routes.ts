@@ -4,7 +4,8 @@ import { multerConfig } from "./config/uploader";
 import productsController from "./controllers/userController";
 import userController from "./controllers/userController";
 import productController from "./controllers/admin/productController";
-import { upload } from "../src/helpers/cloudinary";
+import { upload } from "./helpers/cloudinary";
+// import { upload } from "../src/helpers/cloudinary";
 
 const routes = Router();
 
