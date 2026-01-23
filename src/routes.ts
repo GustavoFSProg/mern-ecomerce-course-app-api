@@ -5,6 +5,7 @@ import productsController from "./controllers/userController";
 import userController from "./controllers/userController";
 import productController from "./controllers/admin/productController";
 import { upload } from "./helpers/cloudinary";
+import cartController from "./controllers/shop/cart-controller";
 // import { upload } from "../src/helpers/cloudinary";
 
 const routes = Router();
@@ -29,12 +30,19 @@ routes.post("/create-user", userController.CreateUser);
 routes.post("/login", userController.Login);
 routes.get(
   "/get-users",
-  userController.authMiddleware,
+  // userController.authMiddleware,
   userController.FindUsers,
 );
 routes.post("/logout", userController.logoutUser);
 // routes.put("/update-user/:id", userController.updateUser);
 // routes.delete("/delete-user/:id", userController.deleteUser);
+
+// CART Routes
+
+routes.post("/add", cartController.addToCart);
+// routes.get("/get/:userId", cartController.fetchCartItems);
+// routes.put("/update-cart", cartController.updateCartItemQty);
+// routes.delete("/:userId/:productId", cartController.deleteCartItem);
 
 export default routes;
 
