@@ -1,118 +1,177 @@
-import { Request, Response } from "express";
-
 // const Cart = require("../../models/Cart");
-import Cart from "../../models/Cart";
-// const ProductModel = require("../../models/Product");
-import ProductModel from "../../models/Product";
-import { debug } from "console";
+// const Product = require("../../models/Product");
 
-async function addToCart(req: Request, res: Response) {
-  try {
-    const { userId, productId, quantity } = req.body;
+// const addToCart = async (req, res) => {
+//   try {
+//     const { userId, productId, quantity } = req.body;
 
-    if (!userId || !productId || quantity <= 0) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid data provided!",
-      });
-    }
+//     if (!userId || !productId || quantity <= 0) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Invalid data provided!",
+//       });
+//     }
 
-    const product = await ProductModel.findById(productId);
+//     const product = await Product.findById(productId);
 
-    if (!product) {
-      return res.status(404).json({
-        success: false,
-        message: "Product not found",
-      });
-    }
+//     if (!product) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Product not found",
+//       });
+//     }
 
-    let cart = await Cart.findOne({ userId });
+//     let cart = await Cart.findOne({ userId });
 
-    if (!cart) {
-      cart = new Cart({ userId, items: [] });
-    }
+//     if (!cart) {
+//       cart = new Cart({ userId, items: [] });
+//     }
 
-    const findCurrentProductIndex = cart.items.findIndex(
-      (item) => item.productId.toString() === productId,
-    );
+//     const findCurrentProductIndex = cart.items.findIndex(
+//       (item) => item.productId.toString() === productId
+//     );
 
-    if (findCurrentProductIndex === -1) {
-      cart.items.push({ productId, quantity });
-    } else {
-      cart.items[findCurrentProductIndex].quantity += quantity;
-    }
+//     if (findCurrentProductIndex === -1) {
+//       cart.items.push({ productId, quantity });
+//     } else {
+//       cart.items[findCurrentProductIndex].quantity += quantity;
+//     }
 
-    await cart.save();
-    res.status(200).json({
-      success: true,
-      data: cart,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      success: false,
-      message: "Error",
-    });
-  }
-}
+//     await cart.save();
+//     res.status(200).json({
+//       success: true,
+//       data: cart,
+//     });
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({
+//       success: false,
+//       message: "Error",
+//     });
+//   }
+// };
 
-//async function BBBaddToCart(req: Request, res: Response) {
-//try {
-// const { userId, items } = req.body;
+// const fetchCartItems = async (req, res) => {
+//   try {
+//     const { userId } = req.params;
 
-// if (!userId || !productId || quantity <= 0) {
-//   return res.status(400).json({
-//     success: false,
-//     message: "Invalid data provided!",
-//   });
-// }
+//     if (!userId) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "User id is manadatory!",
+//       });
+//     }
 
-// const product = await ProductModel.findById(productId);
+//     const cart = await Cart.findOne({ userId }).populate({
+//       path: "items.productId",
+//       select: "image title price salePrice",
+//     });
 
-// if (!product) {
-//   return res.status(404).json({
-//     success: false,
-//     message: "Product not found",
-//   });
-// }
+//     if (!cart) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Cart not found!",
+//       });
+//     }
 
-// async function newProduct() {
-// const Carrinho = await Cart.create({
-// userId: req.body.userId,
-//  items: req.body.Items[],
-//  });
-// }
-// let cart = await Cart.findOne({ userId });
+//     const validItems = cart.items.filter(
+//       (productItem) => productItem.productId
+//     );
 
-// if (!cart) {
-//   cart = new Cart({ userId, items: [] });
-// }
+//     if (validItems.length < cart.items.length) {
+//       cart.items = validItems;
+//       await cart.save();
+//     }
 
-// const findCurrentProductIndex = cart.items.findIndex(
-//   (item) => item.productId.toString() === productId,
-// );
+//     const populateCartItems = validItems.map((item) => ({
+//       productId: item.productId._id,
+//       image: item.productId.image,
+//       title: item.productId.title,
+//       price: item.productId.price,
+//       salePrice: item.productId.salePrice,
+//       quantity: item.quantity,
+//     }));
 
-// if (findCurrentProductIndex === -1) {
-//   cart.items.push({ productId, quantity });
-// } else {
-//   cart.items[findCurrentProductIndex].quantity += quantity;
-// }
+//     res.status(200).json({
+//       success: true,
+//       data: {
+//         ...cart._doc,
+//         items: populateCartItems,
+//       },
+//     });
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({
+//       success: false,
+//       message: "Error",
+//     });
+//   }
+// };
 
-// await cart.save();
-// res.status(200).json({
-// success: true,
-// data: Carrinho,
-// });
-//} catch (error) {
-// console.log(error);
-// res.status(500).json({
-//  success: false,
-// message: error,
-//});
-//}
-//}
+// const updateCartItemQty = async (req, res) => {
+//   try {
+//     const { userId, productId, quantity } = req.body;
 
-// async function deleteCartItem(req: Request, res: Response) {
+//     if (!userId || !productId || quantity <= 0) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Invalid data provided!",
+//       });
+//     }
+
+//     const cart = await Cart.findOne({ userId });
+//     if (!cart) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Cart not found!",
+//       });
+//     }
+
+//     const findCurrentProductIndex = cart.items.findIndex(
+//       (item) => item.productId.toString() === productId
+//     );
+
+//     if (findCurrentProductIndex === -1) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Cart item not present !",
+//       });
+//     }
+
+//     cart.items[findCurrentProductIndex].quantity = quantity;
+//     await cart.save();
+
+//     await cart.populate({
+//       path: "items.productId",
+//       select: "image title price salePrice",
+//     });
+
+//     const populateCartItems = cart.items.map((item) => ({
+//       productId: item.productId ? item.productId._id : null,
+//       image: item.productId ? item.productId.image : null,
+//       title: item.productId ? item.productId.title : "Product not found",
+//       price: item.productId ? item.productId.price : null,
+//       salePrice: item.productId ? item.productId.salePrice : null,
+//       quantity: item.quantity,
+//     }));
+
+//     res.status(200).json({
+//       success: true,
+//       data: {
+//         ...cart._doc,
+//         items: populateCartItems,
+//       },
+//     });
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({
+//       success: false,
+//       message: "Error",
+//     });
+//   }
+// };
+
+// const deleteCartItem = async (req, res) => {
 //   try {
 //     const { userId, productId } = req.params;
 //     if (!userId || !productId) {
@@ -134,7 +193,9 @@ async function addToCart(req: Request, res: Response) {
 //       });
 //     }
 
-//     cart.items.pull({ productId });
+//     cart.items = cart.items.filter(
+//       (item) => item.productId._id.toString() !== productId
+//     );
 
 //     await cart.save();
 
@@ -155,7 +216,7 @@ async function addToCart(req: Request, res: Response) {
 //     res.status(200).json({
 //       success: true,
 //       data: {
-//         ...cart.toObject(),
+//         ...cart._doc,
 //         items: populateCartItems,
 //       },
 //     });
@@ -166,7 +227,11 @@ async function addToCart(req: Request, res: Response) {
 //       message: "Error",
 //     });
 //   }
+// };
 
-export default {
-  addToCart,
-};
+// module.exports = {
+//   addToCart,
+//   updateCartItemQty,
+//   deleteCartItem,
+//   fetchCartItems,
+// };

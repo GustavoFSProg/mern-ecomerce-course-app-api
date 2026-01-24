@@ -39,7 +39,8 @@ routes.post("/logout", userController.logoutUser);
 
 // CART Routes
 
-routes.post("/add", cartController.addToCart);
+routes.post("/add-cart", cartController.addToCart);
+routes.get("/fecth-cart/:userId", cartController.fetchCartItems);
 // routes.get("/get/:userId", cartController.fetchCartItems);
 // routes.put("/update-cart", cartController.updateCartItemQty);
 // routes.delete("/:userId/:productId", cartController.deleteCartItem);
