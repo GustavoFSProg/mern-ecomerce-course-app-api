@@ -102,8 +102,8 @@ async function getCartProducts(req: Request, res: Response) {
     return res.status(200).json({
       success: true,
 
-      //  produto1: cart.items[0].productId,
-      //  produto2: cart.items[1].productId,
+      produto1: cart.items[0].productId,
+      produto2: cart.items[1].productId,
     });
   } catch (error) {
     console.log(error);
