@@ -94,16 +94,20 @@ async function getCartProducts(req: Request, res: Response) {
       select: "*",
     });
 
+    const lista = [];
+
     for (let i = 0; i < cart.items.length; i++) {
       console.log("Produto ", i + 1, ": ", cart.items[i].productId);
-      // return res.json(cart.items[i].productId);
+      lista.push(cart.items[i].productId);
+      // res.json(cart.items[i].productId);
     }
 
     return res.status(200).json({
       success: true,
+      lista: lista.length,
 
-      produto1: cart.items[0].productId,
-      produto2: cart.items[1].productId,
+      // produto1: cart.items[0].productId,
+      //   produto2: cart.items[1].productId,
     });
   } catch (error) {
     console.log(error);
