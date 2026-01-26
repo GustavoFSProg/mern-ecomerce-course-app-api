@@ -16,8 +16,11 @@ const { PORT } = process.env;
 
 const app = express();
 
+app.use(cors(
+{
+    origin: "http://localhost:5173"
+}));
 app.use(cookieParser());
-app.use(cors());
 app.use(express.json());
 app.use(routes);
 
